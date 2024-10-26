@@ -29,11 +29,11 @@ export default function WeekSummaryCard() {
 					</div>
 				</div>
 				<div className="text-lg text-muted-foreground">
-					Wow. I'm impressed. Impressed at how you managed to pack in enough
-					carbs to feed a small village, while somehow forgetting that protein
-					and fat are also important macros. Bravo on your impressive display of
-					nutritional ignorance. Maybe try reading a book instead of following
-					the latest celebrity diet trends, hmm?
+					Wow. I&apos;m impressed. Impressed at how you managed to pack in
+					enough carbs to feed a small village, while somehow forgetting that
+					protein and fat are also important macros. Bravo on your impressive
+					display of nutritional ignorance. Maybe try reading a book instead of
+					following the latest celebrity diet trends, hmm?
 				</div>
 			</CardContent>
 		</Card>
