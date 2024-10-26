@@ -3,8 +3,13 @@
 import OpenAI from "openai";
 import { NextRequest, NextResponse } from "next/server";
 
+const openaiApiKey = process.env.OPENAI_API_KEY;
+if (!openaiApiKey) {
+	throw new Error("Missing OpenAI API key");
+}
+
 const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY!,
+	apiKey: process.env.openaiApiKey!,
 });
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
@@ -26,7 +31,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			throw new Error("No response from OpenAI");
 		}
 
-		const result = parseOpenAiResponse(responseText);
+		const result = responseText;
 		return NextResponse.json(result, { status: 200 });
 	} catch (error) {
 		console.error("Error processing request:", error);
@@ -37,22 +42,22 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 	}
 }
 
-function parseOpenAiResponse(responseText: string) {
-	const mealStatsRegex =
-		/calories:\s*(\d+).*gramsCarbs:\s*(\d+).*gramsProtein:\s*(\d+).*gramsFat:\s*(\d+).*roast:\s*(.+)/is;
-	const match = responseText.match(mealStatsRegex);
+// function parseOpenAiResponse(responseText: string) {
+// 	const mealStatsRegex =
+// 		/calories:\s*(\d+).*gramsCarbs:\s*(\d+).*gramsProtein:\s*(\d+).*gramsFat:\s*(\d+).*roast:\s*(.+)/is;
+// 	const match = responseText.match(mealStatsRegex);
 
-	if (!match) {
-		throw new Error("Invalid response format from OpenAI");
-	}
+// 	if (!match) {
+// 		throw new Error("Invalid response format from OpenAI");
+// 	}
 
-	return {
-		mealStats: {
-			calories: parseInt(match[1], 10),
-			gramsCarbs: parseInt(match[2], 10),
-			gramsProtein: parseInt(match[3], 10),
-			gramsFat: parseInt(match[4], 10),
-		},
-		mealRoast: match[5].trim(),
-	};
-}
+// 	return {
+// 		mealStats: {
+// 			calories: parseInt(match[1], 10),
+// 			gramsCarbs: parseInt(match[2], 10),
+// 			gramsProtein: parseInt(match[3], 10),
+// 			gramsFat: parseInt(match[4], 10),
+// 		},
+// 		mealRoast: match[5].trim(),
+// 	};
+// }

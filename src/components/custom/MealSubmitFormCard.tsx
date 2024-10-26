@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { Coffee, UtensilsCrossed, Cake } from "lucide-react";
-
+import { useState } from "react";
 interface MealSubmitFormCardProps {
 	mealType: string;
 	mealDescription: string;
@@ -35,7 +35,9 @@ export default function MealSubmitFormCard({
 	setMealDescription,
 	setIsSubmit,
 }: MealSubmitFormCardProps) {
-	const handleSubmit = (e: React.FormEvent) => {
+	const [responseText, setResponseText] = useState("");
+
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!mealType || !mealDescription.trim()) {
 			toast({
@@ -45,12 +47,42 @@ export default function MealSubmitFormCard({
 			});
 			return;
 		}
-		// Here you would typically send the data to your backend
-		console.log({ mealType, mealDescription });
-		// Clear the form after successful submission
-		setMealType("");
-		setMealDescription("");
-		setIsSubmit(true);
+
+		try {
+			const response = await fetch("/api/logMeal", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ mealType, mealDescription }),
+			});
+
+			if (!response.ok) {
+				throw new Error("Failed to log meal");
+			}
+
+			const result = await response.json();
+			console.log("Meal logged successfully:", result);
+			setResponseText(result);
+
+			// Clear the form after successful submission
+			setMealType("");
+			setMealDescription("");
+			setIsSubmit(true);
+
+			toast({
+				title: "Success",
+				description: "Meal logged successfully!",
+				variant: "default",
+			});
+		} catch (error) {
+			console.error("Error logging meal:", error);
+			toast({
+				title: "Error",
+				description: "Failed to log meal. Please try again.",
+				variant: "destructive",
+			});
+		}
 	};
 
 	const handleClear = () => {
@@ -128,6 +160,7 @@ export default function MealSubmitFormCard({
 					<Button type="submit">Submit for Judgment</Button>
 				</CardFooter>
 			</form>
+			{responseText && <div>{responseText}</div>}
 		</Card>
 	);
 }
