@@ -19,12 +19,22 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { Coffee, UtensilsCrossed, Cake } from "lucide-react";
-import { useState } from "react";
 
-export default function MealSubmitFormCard() {
-	const [mealType, setMealType] = useState("");
-	const [mealDescription, setMealDescription] = useState("");
+interface MealSubmitFormCardProps {
+	mealType: string;
+	mealDescription: string;
+	setMealType: (value: string) => void;
+	setMealDescription: (value: string) => void;
+	setIsSubmit: (value: boolean) => void;
+}
 
+export default function MealSubmitFormCard({
+	mealType,
+	mealDescription,
+	setMealType,
+	setMealDescription,
+	setIsSubmit,
+}: MealSubmitFormCardProps) {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!mealType || !mealDescription.trim()) {
@@ -37,13 +47,10 @@ export default function MealSubmitFormCard() {
 		}
 		// Here you would typically send the data to your backend
 		console.log({ mealType, mealDescription });
-		toast({
-			title: "Meal logged successfully",
-			description: "Prepare for a roasting in your next summary!",
-		});
 		// Clear the form after successful submission
 		setMealType("");
 		setMealDescription("");
+		setIsSubmit(true);
 	};
 
 	const handleClear = () => {
