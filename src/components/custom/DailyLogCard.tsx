@@ -19,9 +19,7 @@ export default function DailyLogCard() {
 		<Card>
 			<CardHeader>
 				<CardTitle>Daily Log</CardTitle>
-				<CardDescription>
-					Prepare for a serving of truth, extra spicy
-				</CardDescription>
+				<CardDescription>A heavy serving of truth</CardDescription>
 			</CardHeader>
 			<CardContent>
 				<Accordion type="single" collapsible className="w-full">
