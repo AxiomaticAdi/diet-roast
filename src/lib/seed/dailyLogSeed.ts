@@ -1,4 +1,4 @@
-import { Cake, Beef, Carrot, Coffee, UtensilsCrossed } from "lucide-react";
+import { Cake, Beef, Carrot } from "lucide-react";
 
 export const dailyLogs = [
 	{

@@ -16,11 +16,11 @@ export default function UserAdi() {
 				</div>
 			</div>
 			<div className="w-full space-y-4">
-				<h2 className="text-2xl font-bold">Weekly Macro Review</h2>
+				{/* <h2 className="text-2xl font-bold">Weekly Macro Review</h2> */}
 				<WeekSummaryCard />
 			</div>
 			<div className="w-full space-y-4">
-				<h2 className="text-2xl font-bold">Daily Log</h2>
+				{/* <h2 className="text-2xl font-bold">Daily Log</h2> */}
 				<DailyLogCard />
 			</div>
 		</div>
