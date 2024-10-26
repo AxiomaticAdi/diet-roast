@@ -39,7 +39,7 @@ export default function LandingPage() {
 						<p className="mx-auto max-w-2xl text-gray-500 md:text-xl dark:text-gray-400 mt-4">
 							Track your macros, endure our mockery, and{" "}
 							<span className="font-bold italic">maybe</span> lose some weight
-							along the way. Or don't, you waste of space.
+							along the way. Or don&apos;t, you fuck.
 						</p>
 						<div className="mt-6 flex justify-center space-x-4">
 							<Link href="/adi">
