@@ -2,7 +2,7 @@
 
 import OpenAI from "openai";
 import { NextRequest, NextResponse } from "next/server";
-
+import { MealResponse } from "@/types/mealTypes";
 const openaiApiKey = process.env.OPENAI_API_KEY;
 if (!openaiApiKey) {
 	throw new Error("Missing OpenAI API key");
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			throw new Error("No response from OpenAI");
 		}
 
-		const result = responseText;
+		const result = parseOpenAiResponse(responseText);
 		return NextResponse.json(result, { status: 200 });
 	} catch (error) {
 		console.error("Error processing request:", error);
@@ -42,22 +42,42 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 	}
 }
 
-// function parseOpenAiResponse(responseText: string) {
-// 	const mealStatsRegex =
-// 		/calories:\s*(\d+).*gramsCarbs:\s*(\d+).*gramsProtein:\s*(\d+).*gramsFat:\s*(\d+).*roast:\s*(.+)/is;
-// 	const match = responseText.match(mealStatsRegex);
+function parseOpenAiResponse(responseText: string): MealResponse {
+	// Define default values
+	const defaultRoast = "No roast available.";
 
-// 	if (!match) {
-// 		throw new Error("Invalid response format from OpenAI");
-// 	}
+	// Helper function to extract numerical values
+	const extractNumber = (label: string): number => {
+		const regex = new RegExp(`"${label}"\\s*:\\s*(\\d+)`, "i");
+		const match = responseText.match(regex);
+		if (match && match[1]) {
+			const parsed = parseInt(match[1], 10);
+			return isNaN(parsed) ? 0 : parsed;
+		}
+		return 99; // Default value if parsing fails
+	};
 
-// 	return {
-// 		mealStats: {
-// 			calories: parseInt(match[1], 10),
-// 			gramsCarbs: parseInt(match[2], 10),
-// 			gramsProtein: parseInt(match[3], 10),
-// 			gramsFat: parseInt(match[4], 10),
-// 		},
-// 		mealRoast: match[5].trim(),
-// 	};
-// }
+	// Extract each field individually
+	const calories = extractNumber("calories");
+	const gramsCarbs = extractNumber("gramsCarbs");
+	const gramsProtein = extractNumber("gramsProtein");
+	const gramsFat = extractNumber("gramsFat");
+
+	// Extract the roast text
+	let mealRoast = defaultRoast;
+	const roastRegex = /"roast"\s*:\s*"([^"]+)"/i;
+	const roastMatch = responseText.match(roastRegex);
+	if (roastMatch && roastMatch[1]) {
+		mealRoast = roastMatch[1].trim();
+	}
+
+	return {
+		mealStats: {
+			calories,
+			gramsCarbs,
+			gramsProtein,
+			gramsFat,
+		},
+		mealRoast,
+	};
+}
