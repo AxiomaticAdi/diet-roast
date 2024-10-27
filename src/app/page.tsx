@@ -44,10 +44,12 @@ export default function LandingPage() {
 						<div className="mt-6 flex justify-center space-x-4">
 							<Link href="/adi">
 								<Button className="bg-red-600 hover:bg-red-700 flex items-center">
-									See a demo <ArrowRight className="ml-2 h-4 w-4" />
+									Check it out <ArrowRight className="ml-2 h-4 w-4" />
 								</Button>
 							</Link>
-							{/* <Button variant="outline">Learn More</Button> */}
+							<Link href="/adi">
+								<Button variant="outline">See a demo profile</Button>
+							</Link>
 						</div>
 					</div>
 				</section>
