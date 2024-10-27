@@ -47,8 +47,8 @@ export default function LandingPage() {
 									Check it out <ArrowRight className="ml-2 h-4 w-4" />
 								</Button>
 							</Link>
-							<Link href="/adi">
-								<Button variant="outline">See a demo profile</Button>
+							<Link href="/submit">
+								<Button variant="outline">Try demo meal submit (WIP)</Button>
 							</Link>
 						</div>
 					</div>
