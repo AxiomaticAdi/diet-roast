@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/components/custom/Layout";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
