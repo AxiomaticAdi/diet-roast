@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Flame } from "lucide-react";
-
+import Link from "next/link";
 interface LayoutProps {
 	children: ReactNode;
 }
@@ -9,10 +9,10 @@ export default function Layout({ children }: LayoutProps) {
 	return (
 		<div className="flex flex-col min-h-screen">
 			<header className="px-4 lg:px-6 h-14 flex items-center justify-center">
-				<a className="flex items-center" href="#">
+				<Link href="/" className="flex items-center">
 					<Flame className="h-6 w-6 text-primary" />
 					<span className="ml-2 text-2xl font-bold">DietRoast</span>
-				</a>
+				</Link>
 				{/* <nav className="ml-auto flex gap-4 sm:gap-6">
 					<Button variant="ghost" className="text-md font-medium">
 						Features
