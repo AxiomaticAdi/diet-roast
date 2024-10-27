@@ -13,7 +13,7 @@ export default function LandingPage() {
 		<div className="flex flex-col min-h-screen">
 			<header className="px-4 lg:px-6 h-14 flex items-center justify-center">
 				<a className="flex items-center" href="#">
-					<Flame className="h-6 w-6 text-red-600" />
+					<Flame className="h-6 w-6 text-primary" />
 					<span className="ml-2 text-2xl font-bold">DietRoast</span>
 				</a>
 				{/* <nav className="ml-auto flex gap-4 sm:gap-6">
@@ -43,7 +43,7 @@ export default function LandingPage() {
 						</p>
 						<div className="mt-6 flex justify-center space-x-4">
 							<Link href="/adi">
-								<Button className="bg-red-600 hover:bg-red-700 flex items-center">
+								<Button className="flex items-center">
 									Check it out <ArrowRight className="ml-2 h-4 w-4" />
 								</Button>
 							</Link>
@@ -63,7 +63,7 @@ export default function LandingPage() {
 						<div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
 							<Card className="flex flex-col items-center text-center">
 								<CardHeader className="flex flex-col items-center">
-									<Scale className="h-14 w-14 mb-4 text-red-600" />
+									<Scale className="h-14 w-14 mb-4 text-primary" />
 									<CardTitle>Brutal Honesty</CardTitle>
 									<CardDescription>
 										No sugarcoating. That just adds more calories.
@@ -73,7 +73,7 @@ export default function LandingPage() {
 
 							<Card className="flex flex-col items-center text-center">
 								<CardHeader className="flex flex-col items-center">
-									<Flame className="h-14 w-14 mb-4 text-red-600" />
+									<Flame className="h-14 w-14 mb-4 text-primary" />
 									<CardTitle>Calorie Cremation</CardTitle>
 									<CardDescription>
 										Burn your excuses and your love handles.
@@ -83,7 +83,7 @@ export default function LandingPage() {
 
 							<Card className="flex flex-col items-center text-center">
 								<CardHeader className="flex flex-col items-center">
-									<Carrot className="h-14 w-14 mb-4 text-red-600" />
+									<Carrot className="h-14 w-14 mb-4 text-primary" />
 									<CardTitle>Veggie Vengeance</CardTitle>
 									<CardDescription>
 										Ignore your greens? Prepare for mean.
