@@ -7,12 +7,15 @@ export default function UserAdi() {
 		<div className="flex flex-col items-center justify-center w-full max-w-2xl mx-auto space-y-8 p-6 md:p-8">
 			<div className="flex flex-col items-center space-y-4">
 				<Avatar className="w-24 h-24 border-4 border-primary">
-					<AvatarImage src="/placeholder-user.jpg" alt="user-avatar" />
+					<AvatarImage
+						src="https://res.cloudinary.com/djxfhec23/image/upload/v1730049245/General/adi-egg_pbucs1.jpg"
+						alt="user-avatar"
+					/>
 					<AvatarFallback>AR</AvatarFallback>
 				</Avatar>
 				<div className="text-center">
 					<h1 className="text-3xl font-bold">Adi</h1>
-					<p className="text-muted-foreground">Professional Snack Enthusiast</p>
+					<p className="text-muted-primary">Professional Snack Enthusiast</p>
 				</div>
 			</div>
 			<div className="w-full space-y-4">
