@@ -18,7 +18,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
-import { Coffee, UtensilsCrossed, Cake } from "lucide-react";
+import { Coffee, Utensils, UtensilsCrossed, Donut } from "lucide-react";
 import { useState } from "react";
 import { MealResponse } from "@/types/mealTypes";
 interface MealSubmitFormCardProps {
@@ -120,25 +120,25 @@ export default function MealSubmitFormCard({
 							<SelectContent>
 								<SelectItem value="breakfast">
 									<div className="flex items-center">
-										<Coffee className="mr-2 h-4 w-4" />
+										<Coffee className="mr-2 h-4 w-4 text-primary" />
 										Breakfast
 									</div>
 								</SelectItem>
 								<SelectItem value="lunch">
 									<div className="flex items-center">
-										<UtensilsCrossed className="mr-2 h-4 w-4" />
+										<Utensils className="mr-2 h-4 w-4 text-primary" />
 										Lunch
 									</div>
 								</SelectItem>
 								<SelectItem value="dinner">
 									<div className="flex items-center">
-										<UtensilsCrossed className="mr-2 h-4 w-4" />
+										<UtensilsCrossed className="mr-2 h-4 w-4 text-primary" />
 										Dinner
 									</div>
 								</SelectItem>
 								<SelectItem value="snack">
 									<div className="flex items-center">
-										<Cake className="mr-2 h-4 w-4" />
+										<Donut className="mr-2 h-4 w-4 text-primary" />
 										Snack
 									</div>
 								</SelectItem>
