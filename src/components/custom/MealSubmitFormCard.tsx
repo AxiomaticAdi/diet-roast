@@ -20,12 +20,14 @@ import {
 import { toast } from "@/hooks/use-toast";
 import { Coffee, UtensilsCrossed, Cake } from "lucide-react";
 import { useState } from "react";
+import { MealResponse } from "@/types/mealTypes";
 interface MealSubmitFormCardProps {
 	mealType: string;
 	mealDescription: string;
 	setMealType: (value: string) => void;
 	setMealDescription: (value: string) => void;
 	setIsSubmit: (value: boolean) => void;
+	setMealResponse: (value: MealResponse) => void;
 }
 
 export default function MealSubmitFormCard({
@@ -34,6 +36,7 @@ export default function MealSubmitFormCard({
 	setMealType,
 	setMealDescription,
 	setIsSubmit,
+	setMealResponse,
 }: MealSubmitFormCardProps) {
 	const [responseText, setResponseText] = useState("");
 
@@ -63,7 +66,12 @@ export default function MealSubmitFormCard({
 
 			const result = await response.json();
 			console.log("Meal logged successfully:", result);
-			setResponseText(result);
+			setResponseText(result.rawResponseString);
+			try {
+				setMealResponse(result);
+			} catch (error) {
+				console.error("Error setting meal response:", error);
+			}
 
 			// Clear the form after successful submission
 			setMealType("");

@@ -79,5 +79,6 @@ function parseOpenAiResponse(responseText: string): MealResponse {
 			gramsFat,
 		},
 		mealRoast,
+		rawResponseString: responseText,
 	};
 }

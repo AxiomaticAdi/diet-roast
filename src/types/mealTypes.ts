@@ -8,4 +8,5 @@ export type MealStats = {
 export type MealResponse = {
 	mealStats: MealStats;
 	mealRoast: string;
+	rawResponseString: string;
 };
