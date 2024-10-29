@@ -11,7 +11,7 @@ import {
 	AccordionItem,
 	AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Cake, Coffee, UtensilsCrossed } from "lucide-react";
+import { Coffee, Donut, Utensils, UtensilsCrossed } from "lucide-react";
 import { dailyLogs } from "@/lib/seed/dailyLogSeed";
 
 export default function DailyLogCard() {
@@ -27,7 +27,7 @@ export default function DailyLogCard() {
 						<AccordionItem key={index} value={`item-${index}`}>
 							<AccordionTrigger>
 								<div className="flex items-center gap-4">
-									<log.icon className="w-8 h-8 text-muted-foreground" />
+									<log.icon className="w-8 h-8 text-primary" />
 									<div className="text-left">
 										<h3 className="font-semibold">{log.date}</h3>
 										<p className="text-sm text-muted-foreground italic">
@@ -39,22 +39,22 @@ export default function DailyLogCard() {
 							<AccordionContent>
 								<div className="pl-12 space-y-2">
 									<div className="flex items-center gap-2">
-										<Coffee className="w-4 h-4" />
+										<Coffee className="w-4 h-4 text-primary" />
 										<span className="font-medium">Breakfast:</span>{" "}
 										{log.meals.breakfast}
 									</div>
 									<div className="flex items-center gap-2">
-										<UtensilsCrossed className="w-4 h-4" />
+										<Utensils className="w-4 h-4 text-primary" />
 										<span className="font-medium">Lunch:</span>{" "}
 										{log.meals.lunch}
 									</div>
 									<div className="flex items-center gap-2">
-										<UtensilsCrossed className="w-4 h-4" />
+										<UtensilsCrossed className="w-4 h-4 text-primary" />
 										<span className="font-medium">Dinner:</span>{" "}
 										{log.meals.dinner}
 									</div>
 									<div className="flex items-center gap-2">
-										<Cake className="w-4 h-4" />
+										<Donut className="w-4 h-4 text-primary" />
 										<span className="font-medium">Snacks:</span>{" "}
 										{log.meals.snacks}
 									</div>
