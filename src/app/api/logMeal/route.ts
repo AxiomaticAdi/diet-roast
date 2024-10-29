@@ -1,8 +1,7 @@
-// File: src/app/api/logMeal/route.ts
-
 import OpenAI from "openai";
 import { NextRequest, NextResponse } from "next/server";
 import { MealResponse } from "@/types/mealTypes";
+
 const openaiApiKey = process.env.OPENAI_API_KEY;
 if (!openaiApiKey) {
 	throw new Error("Missing OpenAI API key");
