@@ -6,7 +6,6 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
 import { Flame, Carrot, Beef, Croissant } from "lucide-react";
 import { MealResponse } from "@/types/mealTypes";
 
@@ -37,13 +36,24 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 		<Card className="w-full max-w-md mx-auto">
 			<CardHeader>
 				<CardTitle className="text-2xl font-bold">
-					Your Nutritional Disaster Report
+					Nutritional Disaster Report
 				</CardTitle>
 				<CardDescription>
 					Brace yourself for the cold, hard truth
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="space-y-6">
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center space-x-2">
+							<Flame className="w-6 h-6 text-red-500" />
+							<span>Meal Overview</span>
+						</CardTitle>
+					</CardHeader>
+					<CardContent>
+						<p className="text-lg italic">{mealResponse.mealRoast}</p>
+					</CardContent>
+				</Card>
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Card>
 						<CardHeader className="flex flex-row items-center space-x-2">
@@ -120,18 +130,6 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 						</CardContent>
 					</Card>
 				</div>
-				<Separator />
-				<Card>
-					<CardHeader>
-						<CardTitle className="flex items-center space-x-2">
-							<Flame className="w-6 h-6 text-red-500" />
-							<span>Your Personal Roast</span>
-						</CardTitle>
-					</CardHeader>
-					<CardContent>
-						<p className="text-lg italic">{mealResponse.mealRoast}</p>
-					</CardContent>
-				</Card>
 			</CardContent>
 		</Card>
 	);
