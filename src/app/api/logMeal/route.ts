@@ -55,7 +55,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 						"Analyze the meal and provide:",
 						"- Estimated calories",
 						"- Macronutrient breakdown in grams (carbs, protein, fat)",
-						"- A sarcastic roast of their meal choice",
+						"- A short, sarcastic roast of their meal choice",
 					].join("\n"),
 				},
 				{
@@ -69,22 +69,29 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 			response_format: zodResponseFormat(MealAnalysis, "mealAnalysis"),
 		});
 
-		console.log("completion: ", completion);
 		const parsedResponse = completion.choices[0].message.parsed;
 		const rawResponseString = completion.choices[0].message.content || "";
 
+		if (
+			!parsedResponse?.calories ||
+			!parsedResponse?.gramsCarbs ||
+			!parsedResponse?.gramsProtein ||
+			!parsedResponse?.gramsFat ||
+			!parsedResponse?.mealRoast
+		) {
+			throw new Error("Missing required fields in the OpenAI response");
+		}
+
 		const mealResponse: MealResponse = {
 			mealStats: {
-				calories: parsedResponse?.calories || 0,
-				gramsCarbs: parsedResponse?.gramsCarbs || 0,
-				gramsProtein: parsedResponse?.gramsProtein || 0,
-				gramsFat: parsedResponse?.gramsFat || 0,
+				calories: parsedResponse?.calories,
+				gramsCarbs: parsedResponse?.gramsCarbs,
+				gramsProtein: parsedResponse?.gramsProtein,
+				gramsFat: parsedResponse?.gramsFat,
 			},
-			mealRoast: parsedResponse?.mealRoast || "",
+			mealRoast: parsedResponse?.mealRoast,
 			rawResponseString: rawResponseString,
 		};
-
-		console.log("mealResponse: ", mealResponse);
 
 		return NextResponse.json(mealResponse, { status: 200 });
 	} catch (error) {
