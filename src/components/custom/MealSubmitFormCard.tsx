@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { Coffee, Utensils, UtensilsCrossed, Donut } from "lucide-react";
-import { useState } from "react";
 import { MealResponse } from "@/types/mealTypes";
 interface MealSubmitFormCardProps {
 	mealType: string;
@@ -38,8 +37,6 @@ export default function MealSubmitFormCard({
 	setIsSubmit,
 	setMealResponse,
 }: MealSubmitFormCardProps) {
-	const [responseText, setResponseText] = useState("");
-
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!mealType || !mealDescription.trim()) {
@@ -65,8 +62,6 @@ export default function MealSubmitFormCard({
 			}
 
 			const result = await response.json();
-			console.log("Meal logged successfully:", result);
-			setResponseText(result.rawResponseString);
 			try {
 				setMealResponse(result);
 			} catch (error) {
@@ -168,7 +163,6 @@ export default function MealSubmitFormCard({
 					<Button type="submit">Submit for Judgment</Button>
 				</CardFooter>
 			</form>
-			{responseText && <div>{responseText}</div>}
 		</Card>
 	);
 }
