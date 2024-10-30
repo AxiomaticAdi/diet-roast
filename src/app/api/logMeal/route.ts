@@ -1,5 +1,7 @@
 import OpenAI from "openai";
+import { zodResponseFormat } from "openai/helpers/zod";
 import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 import { MealResponse } from "@/types/mealTypes";
 
 const openaiApiKey = process.env.OPENAI_API_KEY;
@@ -8,76 +10,88 @@ if (!openaiApiKey) {
 }
 
 const openai = new OpenAI({
-	apiKey: process.env.openaiApiKey!,
+	apiKey: openaiApiKey,
+});
+
+const MealAnalysis = z.object({
+	calories: z.number(),
+	gramsCarbs: z.number(),
+	gramsProtein: z.number(),
+	gramsFat: z.number(),
+	mealRoast: z.string(),
 });
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
+	let mealType: string;
+	let mealDescription: string;
+
 	try {
-		const {
-			mealType,
-			mealDescription,
-		}: { mealType: string; mealDescription: string } = await req.json();
+		const body = await req.json();
+		mealType = body.mealType;
+		mealDescription = body.mealDescription;
 
-		const prompt = `Analyze the following meal for calories and macros. Then, from the perspective of a sassy, sarcastic, and mean but always humorous diet coach: provide a scathing review of of the following food logs for a new client.\n\nMeal type: ${mealType}\nMeal description: ${mealDescription}\n\nOutput format:\n"calories": [number]\n"gramsCarbs": [number]\n"gramsProtein": [number]\n"gramsFat": [number]\n"roast": [roast text]\n`;
-
-		const gptResponse = await openai.chat.completions.create({
-			model: "gpt-4o-mini",
-			messages: [{ role: "user", content: prompt }],
-			max_tokens: 150,
-		});
-		const responseText = gptResponse.choices[0]?.message.content?.trim();
-		if (!responseText) {
-			throw new Error("No response from OpenAI");
+		if (!mealType || !mealDescription) {
+			return NextResponse.json(
+				{ error: "Missing required fields: mealType and mealDescription" },
+				{ status: 400 }
+			);
 		}
-
-		const result = parseOpenAiResponse(responseText);
-		return NextResponse.json(result, { status: 200 });
 	} catch (error) {
-		console.error("Error processing request:", error);
+		console.error("Failed to parse request body:", error);
 		return NextResponse.json(
-			{ error: "Failed to process meal" },
+			{ error: "Invalid request body" },
+			{ status: 400 }
+		);
+	}
+
+	try {
+		const completion = await openai.beta.chat.completions.parse({
+			model: "gpt-4o-mini",
+			messages: [
+				{
+					role: "system",
+					content: [
+						"You are a diet coach with a sassy, sarcastic, and mean but always humorous personality.",
+						"Analyze the meal and provide:",
+						"- Estimated calories",
+						"- Macronutrient breakdown in grams (carbs, protein, fat)",
+						"- A sarcastic roast of their meal choice",
+					].join("\n"),
+				},
+				{
+					role: "user",
+					content: [
+						`Meal type: ${mealType}`,
+						`Meal description: ${mealDescription}`,
+					].join("\n"),
+				},
+			],
+			response_format: zodResponseFormat(MealAnalysis, "mealAnalysis"),
+		});
+
+		console.log("completion: ", completion);
+		const parsedResponse = completion.choices[0].message.parsed;
+		const rawResponseString = completion.choices[0].message.content || "";
+
+		const mealResponse: MealResponse = {
+			mealStats: {
+				calories: parsedResponse?.calories || 0,
+				gramsCarbs: parsedResponse?.gramsCarbs || 0,
+				gramsProtein: parsedResponse?.gramsProtein || 0,
+				gramsFat: parsedResponse?.gramsFat || 0,
+			},
+			mealRoast: parsedResponse?.mealRoast || "",
+			rawResponseString: rawResponseString,
+		};
+
+		console.log("mealResponse: ", mealResponse);
+
+		return NextResponse.json(mealResponse, { status: 200 });
+	} catch (error) {
+		console.error("Failed to process meal analysis:", error);
+		return NextResponse.json(
+			{ error: `Failed to analyze meal: ${error}` },
 			{ status: 500 }
 		);
 	}
-}
-
-function parseOpenAiResponse(responseText: string): MealResponse {
-	// Define default values
-	const defaultRoast = "No roast available.";
-
-	// Helper function to extract numerical values
-	const extractNumber = (label: string): number => {
-		const regex = new RegExp(`"${label}"\\s*:\\s*(\\d+)`, "i");
-		const match = responseText.match(regex);
-		if (match && match[1]) {
-			const parsed = parseInt(match[1], 10);
-			return isNaN(parsed) ? 0 : parsed;
-		}
-		return 99; // Default value if parsing fails
-	};
-
-	// Extract each field individually
-	const calories = extractNumber("calories");
-	const gramsCarbs = extractNumber("gramsCarbs");
-	const gramsProtein = extractNumber("gramsProtein");
-	const gramsFat = extractNumber("gramsFat");
-
-	// Extract the roast text
-	let mealRoast = defaultRoast;
-	const roastRegex = /"roast"\s*:\s*"([^"]+)"/i;
-	const roastMatch = responseText.match(roastRegex);
-	if (roastMatch && roastMatch[1]) {
-		mealRoast = roastMatch[1].trim();
-	}
-
-	return {
-		mealStats: {
-			calories,
-			gramsCarbs,
-			gramsProtein,
-			gramsFat,
-		},
-		mealRoast,
-		rawResponseString: responseText,
-	};
 }
