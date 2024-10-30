@@ -17,7 +17,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { toast } from "@/hooks/use-toast";
 import { Coffee, Utensils, UtensilsCrossed, Donut } from "lucide-react";
 import { MealResponse } from "@/types/mealTypes";
 interface MealSubmitFormCardProps {
@@ -40,11 +39,7 @@ export default function MealSubmitFormCard({
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		if (!mealType || !mealDescription.trim()) {
-			toast({
-				title: "Error",
-				description: "Please fill out both fields before submitting.",
-				variant: "destructive",
-			});
+			alert("Please fill out all fields before submitting.");
 			return;
 		}
 
@@ -57,11 +52,15 @@ export default function MealSubmitFormCard({
 				body: JSON.stringify({ mealType, mealDescription }),
 			});
 
-			if (!response.ok) {
-				throw new Error("Failed to log meal");
+			const result = await response.json();
+
+			if (!response.ok || result.error) {
+				alert(
+					"Are you sure that's real food? GPT-4 couldn't process this input. Try describing your meal more clearly!"
+				);
+				return;
 			}
 
-			const result = await response.json();
 			try {
 				setMealResponse(result);
 			} catch (error) {
@@ -72,19 +71,11 @@ export default function MealSubmitFormCard({
 			setMealType("");
 			setMealDescription("");
 			setIsSubmit(true);
-
-			toast({
-				title: "Success",
-				description: "Meal logged successfully!",
-				variant: "default",
-			});
 		} catch (error) {
 			console.error("Error logging meal:", error);
-			toast({
-				title: "Error",
-				description: "Failed to log meal. Please try again.",
-				variant: "destructive",
-			});
+			alert(
+				"GPT-4 is having trouble understanding your meal. Maybe try describing it differently?"
+			);
 		}
 	};
 
