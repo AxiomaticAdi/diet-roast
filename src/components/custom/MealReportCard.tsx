@@ -9,12 +9,12 @@ import { Progress } from "@/components/ui/progress";
 import { Flame, Carrot, Beef, Croissant } from "lucide-react";
 import { MealResponse } from "@/types/mealTypes";
 
-// Assuming recommended daily values for an average adult
+// Assuming recommended values per meal for an average adult
 const recommendedValues = {
-	calories: 2000,
-	carbs: 250, // grams
-	protein: 50, // grams
-	fat: 70, // grams
+	calories: 660,
+	carbs: 80, // grams
+	protein: 40, // grams
+	fat: 20, // grams
 };
 
 interface MealReportCardProps {
