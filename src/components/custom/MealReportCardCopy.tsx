@@ -59,7 +59,7 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 						<p className="text-lg italic">{mealResponse.mealRoast}</p>
 					</CardContent>
 				</Card>
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 					<Card>
 						<CardHeader className="flex flex-row items-center space-x-2">
 							<Flame className="w-6 h-6 text-red-500" />
@@ -69,44 +69,14 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 							<div className="text-2xl font-bold">
 								{mealStats.calories} / {recommendedValues.calories}
 							</div>
-							<GaugeComponent
-								type="semicircle"
-								minValue={0}
-								maxValue={1000}
-								value={mealStats.calories}
-								labels={{
-									valueLabel: {
-										hide: true,
-									},
-									tickLabels: {
-										hideMinMax: true,
-										type: "inner",
-										ticks: [
-											{ value: 200 },
-											{ value: 400 },
-											{ value: 600 },
-											{ value: 800 },
-										],
-										defaultTickLineConfig: {
-											hide: false,
-										},
-										defaultTickValueConfig: {
-											hide: true,
-										},
-									},
-								}}
-								arc={{
-									subArcs: [
-										{ length: 0.25, color: "#EA4228" },
-										{ length: 0.25, color: "#EFD700" },
-										{ length: 0.25, color: "#5BE12C" },
-										{ length: 0.25, color: "#EFD700" },
-										{ length: 0.25, color: "#EA4228" },
-									],
-									padding: 0.02,
-									width: 0.3,
-								}}
-							/>
+							<GaugeComponent />
+							{/* <Progress
+								value={(mealStats.calories / recommendedValues.calories) * 100}
+								className={`h-2 mt-2 ${getProgressColor(
+									mealStats.calories,
+									recommendedValues.calories
+								)}`}
+							/> */}
 						</CardContent>
 					</Card>
 					<Card>
@@ -118,44 +88,12 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 							<div className="text-2xl font-bold">
 								{mealStats.gramsCarbs}g / {recommendedValues.carbs}g
 							</div>
-							<GaugeComponent
-								type="semicircle"
-								minValue={0}
-								maxValue={1000}
-								value={mealStats.gramsCarbs}
-								labels={{
-									valueLabel: {
-										hide: true,
-									},
-									tickLabels: {
-										hideMinMax: true,
-										type: "inner",
-										ticks: [
-											{ value: 200 },
-											{ value: 400 },
-											{ value: 600 },
-											{ value: 800 },
-										],
-										defaultTickLineConfig: {
-											hide: false,
-										},
-										defaultTickValueConfig: {
-											hide: true,
-										},
-									},
-								}}
-								arc={{
-									colorArray: ["#5BE12C", "#FFFF00", "#EA4228"],
-									subArcs: [
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-									],
-									padding: 0.02,
-									width: 0.3,
-								}}
+							<Progress
+								value={(mealStats.gramsCarbs / recommendedValues.carbs) * 100}
+								className={`h-2 mt-2 ${getProgressColor(
+									mealStats.gramsCarbs,
+									recommendedValues.carbs
+								)}`}
 							/>
 						</CardContent>
 					</Card>
