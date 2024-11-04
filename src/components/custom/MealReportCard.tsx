@@ -5,7 +5,6 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Flame, Carrot, Beef, Croissant } from "lucide-react";
 import { MealResponse } from "@/types/mealTypes";
 
@@ -30,12 +29,6 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 	if (!mealResponse) return null;
 
 	const mealStats = mealResponse.mealStats;
-	const getProgressColor = (current: number, max: number) => {
-		const percentage = (current / max) * 100;
-		if (percentage > 100) return "bg-red-500";
-		if (percentage > 75) return "bg-yellow-500";
-		return "bg-green-500";
-	};
 
 	return (
 		<Card className="w-full max-w-md mx-auto">
@@ -168,14 +161,44 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 							<div className="text-2xl font-bold">
 								{mealStats.gramsProtein}g / {recommendedValues.protein}g
 							</div>
-							<Progress
-								value={
-									(mealStats.gramsProtein / recommendedValues.protein) * 100
-								}
-								className={`h-2 mt-2 ${getProgressColor(
-									mealStats.gramsProtein,
-									recommendedValues.protein
-								)}`}
+							<GaugeComponent
+								type="semicircle"
+								minValue={0}
+								maxValue={50}
+								value={mealStats.gramsProtein}
+								labels={{
+									valueLabel: {
+										hide: true,
+									},
+									tickLabels: {
+										hideMinMax: true,
+										type: "inner",
+										ticks: [
+											{ value: 10 },
+											{ value: 20 },
+											{ value: 30 },
+											{ value: 40 },
+										],
+										defaultTickLineConfig: {
+											hide: false,
+										},
+										defaultTickValueConfig: {
+											hide: true,
+										},
+									},
+								}}
+								arc={{
+									colorArray: ["#EA4228", "#FFFF00", "#5BE12C"],
+									subArcs: [
+										{ length: 0.25 },
+										{ length: 0.25 },
+										{ length: 0.25 },
+										{ length: 0.25 },
+										{ length: 0.25 },
+									],
+									padding: 0.02,
+									width: 0.3,
+								}}
 							/>
 						</CardContent>
 					</Card>
@@ -188,12 +211,44 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 							<div className="text-2xl font-bold">
 								{mealStats.gramsFat}g / {recommendedValues.fat}g
 							</div>
-							<Progress
-								value={(mealStats.gramsFat / recommendedValues.fat) * 100}
-								className={`h-2 mt-2 ${getProgressColor(
-									mealStats.gramsFat,
-									recommendedValues.fat
-								)}`}
+							<GaugeComponent
+								type="semicircle"
+								minValue={0}
+								maxValue={50}
+								value={mealStats.gramsFat}
+								labels={{
+									valueLabel: {
+										hide: true,
+									},
+									tickLabels: {
+										hideMinMax: true,
+										type: "inner",
+										ticks: [
+											{ value: 10 },
+											{ value: 20 },
+											{ value: 30 },
+											{ value: 40 },
+										],
+										defaultTickLineConfig: {
+											hide: false,
+										},
+										defaultTickValueConfig: {
+											hide: true,
+										},
+									},
+								}}
+								arc={{
+									colorArray: ["#5BE12C", "#FFFF00", "#EA4228"],
+									subArcs: [
+										{ length: 0.25 },
+										{ length: 0.25 },
+										{ length: 0.25 },
+										{ length: 0.25 },
+										{ length: 0.25 },
+									],
+									padding: 0.02,
+									width: 0.3,
+								}}
 							/>
 						</CardContent>
 					</Card>
