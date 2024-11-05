@@ -5,7 +5,7 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Flame, Carrot, Beef, Croissant } from "lucide-react";
+import { Flame, Carrot, Beef, Croissant, Utensils } from "lucide-react";
 import { MealResponse } from "@/types/mealTypes";
 
 import dynamic from "next/dynamic";
@@ -42,9 +42,9 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 			</CardHeader>
 			<CardContent className="space-y-6">
 				<Card>
-					<CardHeader>
+					<CardHeader className="flex flex-col items-center">
 						<CardTitle className="flex items-center space-x-2">
-							<Flame className="w-6 h-6 text-red-500" />
+							<Utensils className="w-6 h-6 text-red-500" />
 							<span>Meal Overview</span>
 						</CardTitle>
 					</CardHeader>
@@ -53,15 +53,17 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 					</CardContent>
 				</Card>
 				<div className="grid grid-cols-1 gap-4">
-					<Card>
-						<CardHeader className="flex flex-row items-center space-x-2">
-							<Flame className="w-6 h-6 text-red-500" />
-							<CardTitle>Calories</CardTitle>
+					<Card className="flex flex-col">
+						<CardHeader className="flex flex-col items-center">
+							<div className="flex items-center space-x-2">
+								<Flame className="w-6 h-6 text-red-500" />
+								<CardTitle>Calories: {mealStats.calories}</CardTitle>
+							</div>
+							<CardDescription>
+								Target: {recommendedValues.calories}
+							</CardDescription>
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold">
-								{mealStats.calories} / {recommendedValues.calories}
-							</div>
 							<GaugeComponent
 								type="semicircle"
 								minValue={0}
