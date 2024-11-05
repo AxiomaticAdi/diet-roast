@@ -73,31 +73,32 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 									},
 									tickLabels: {
 										hideMinMax: true,
-										type: "inner",
-										ticks: [
-											{ value: 200 },
-											{ value: 400 },
-											{ value: 600 },
-											{ value: 800 },
-										],
 										defaultTickLineConfig: {
 											hide: false,
 										},
 										defaultTickValueConfig: {
-											hide: true,
+											hide: false,
 										},
 									},
 								}}
 								arc={{
 									subArcs: [
-										{ length: 0.25, color: "#EA4228" },
-										{ length: 0.25, color: "#EFD700" },
-										{ length: 0.25, color: "#5BE12C" },
-										{ length: 0.25, color: "#EFD700" },
-										{ length: 0.25, color: "#EA4228" },
+										{ length: 0.1, color: "#EA4228" },
+										{ length: 0.1, color: "#E88F29" },
+										{ length: 0.1, color: "#E6D929" },
+										{ length: 0.1, color: "#A5E32B" },
+										{ length: 0.1, color: "#5BE12C" },
+										{ length: 0.1, color: "#A5E32B" },
+										{ length: 0.1, color: "#E6D929" },
+										{ length: 0.1, color: "#E88F29" },
+										{ length: 0.1, color: "#EA4228" },
 									],
 									padding: 0.02,
 									width: 0.3,
+								}}
+								pointer={{
+									animationDelay: 500,
+									animationDuration: 5000,
 								}}
 							/>
 						</CardContent>
