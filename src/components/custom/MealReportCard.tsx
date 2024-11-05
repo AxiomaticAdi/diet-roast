@@ -5,16 +5,21 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Flame, Carrot, Beef, Croissant } from "lucide-react";
+import { Flame, Utensils, Scale } from "lucide-react";
+import { PieChart } from "@mui/x-charts/PieChart";
 import { MealResponse } from "@/types/mealTypes";
+
+import dynamic from "next/dynamic";
+const GaugeComponent = dynamic(() => import("react-gauge-component"), {
+	ssr: false,
+});
 
 // Assuming recommended values per meal for an average adult
 const recommendedValues = {
-	calories: 660,
-	carbs: 80, // grams
-	protein: 40, // grams
-	fat: 20, // grams
+	calories: 525,
+	carbs: 25, // grams
+	protein: 50, // grams
+	fat: 25, // grams
 };
 
 interface MealReportCardProps {
@@ -25,12 +30,29 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 	if (!mealResponse) return null;
 
 	const mealStats = mealResponse.mealStats;
-	const getProgressColor = (current: number, max: number) => {
-		const percentage = (current / max) * 100;
-		if (percentage > 100) return "bg-red-500";
-		if (percentage > 75) return "bg-yellow-500";
-		return "bg-green-500";
-	};
+	const proteinPercentage = Math.round(
+		(mealStats.gramsProtein /
+			(mealStats.gramsProtein + mealStats.gramsCarbs + mealStats.gramsFat)) *
+			100
+	);
+
+	function getProteinMessage(proteinPercentage: number): string {
+		if (proteinPercentage <= 10) {
+			return "Did you even try? This is practically a carb party.";
+		} else if (proteinPercentage <= 30) {
+			return "Are you allergic to gains, or is this just a warm-up?";
+		} else if (proteinPercentage <= 45) {
+			return "Decent, for a newb.";
+		} else if (proteinPercentage <= 55) {
+			return "Right on target!";
+		} else if (proteinPercentage <= 85) {
+			return "This meal could make a protein bar cry with envy. Solid work.";
+		} else if (proteinPercentage <= 100) {
+			return "Is this a bodybuilder's meal?";
+		} else {
+			return "ERROR";
+		}
+	}
 
 	return (
 		<Card className="w-full max-w-md mx-auto">
@@ -44,9 +66,9 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 			</CardHeader>
 			<CardContent className="space-y-6">
 				<Card>
-					<CardHeader>
+					<CardHeader className="flex flex-col items-center">
 						<CardTitle className="flex items-center space-x-2">
-							<Flame className="w-6 h-6 text-red-500" />
+							<Utensils className="w-6 h-6 text-red-500" />
 							<span>Meal Overview</span>
 						</CardTitle>
 					</CardHeader>
@@ -54,78 +76,106 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 						<p className="text-lg italic">{mealResponse.mealRoast}</p>
 					</CardContent>
 				</Card>
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-					<Card>
-						<CardHeader className="flex flex-row items-center space-x-2">
-							<Flame className="w-6 h-6 text-red-500" />
-							<CardTitle>Calories</CardTitle>
+				<div className="grid grid-cols-1 gap-4">
+					<Card className="flex flex-col">
+						<CardHeader className="flex flex-col items-center">
+							<div className="flex items-center space-x-2">
+								<Flame className="w-6 h-6 text-red-500" />
+								<CardTitle>Calories: {mealStats.calories}</CardTitle>
+							</div>
+							<CardDescription className="text-center">
+								Target: {recommendedValues.calories}
+							</CardDescription>
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold">
-								{mealStats.calories} / {recommendedValues.calories}
-							</div>
-							<Progress
-								value={(mealStats.calories / recommendedValues.calories) * 100}
-								className={`h-2 mt-2 ${getProgressColor(
-									mealStats.calories,
-									recommendedValues.calories
-								)}`}
+							<GaugeComponent
+								type="semicircle"
+								minValue={0}
+								maxValue={1000}
+								value={mealStats.calories}
+								labels={{
+									valueLabel: {
+										hide: true,
+									},
+									tickLabels: {
+										hideMinMax: true,
+										defaultTickLineConfig: {
+											hide: false,
+										},
+										defaultTickValueConfig: {
+											hide: false,
+										},
+									},
+								}}
+								arc={{
+									subArcs: [
+										{ length: 0.1, color: "#EA4228" },
+										{ length: 0.1, color: "#E88F29" },
+										{ length: 0.1, color: "#E6D929" },
+										{ length: 0.1, color: "#A5E32B" },
+										{ length: 0.1, color: "#5BE12C" },
+										{ length: 0.1, color: "#A5E32B" },
+										{ length: 0.1, color: "#E6D929" },
+										{ length: 0.1, color: "#E88F29" },
+										{ length: 0.1, color: "#EA4228" },
+									],
+									padding: 0.02,
+									width: 0.3,
+								}}
+								pointer={{
+									animationDelay: 500,
+									animationDuration: 5000,
+								}}
 							/>
 						</CardContent>
 					</Card>
-					<Card>
-						<CardHeader className="flex flex-row items-center space-x-2">
-							<Carrot className="w-6 h-6 text-orange-500" />
-							<CardTitle>Carbs</CardTitle>
+					<Card className="flex flex-col">
+						<CardHeader className="flex flex-col items-center">
+							<div className="flex items-center space-x-2">
+								<Scale className="w-6 h-6 text-red-500" />
+								<CardTitle>Macros</CardTitle>
+							</div>
+							<CardDescription className="flex flex-col gap-0 text-center">
+								<div>Target: 50% Protein</div>
+								<div>Result: {proteinPercentage}% Protein</div>
+								<div>{getProteinMessage(proteinPercentage)}</div>
+							</CardDescription>
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold">
-								{mealStats.gramsCarbs}g / {recommendedValues.carbs}g
-							</div>
-							<Progress
-								value={(mealStats.gramsCarbs / recommendedValues.carbs) * 100}
-								className={`h-2 mt-2 ${getProgressColor(
-									mealStats.gramsCarbs,
-									recommendedValues.carbs
-								)}`}
-							/>
-						</CardContent>
-					</Card>
-					<Card>
-						<CardHeader className="flex flex-row items-center space-x-2">
-							<Beef className="w-6 h-6 text-red-700" />
-							<CardTitle>Protein</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">
-								{mealStats.gramsProtein}g / {recommendedValues.protein}g
-							</div>
-							<Progress
-								value={
-									(mealStats.gramsProtein / recommendedValues.protein) * 100
-								}
-								className={`h-2 mt-2 ${getProgressColor(
-									mealStats.gramsProtein,
-									recommendedValues.protein
-								)}`}
-							/>
-						</CardContent>
-					</Card>
-					<Card>
-						<CardHeader className="flex flex-row items-center space-x-2">
-							<Croissant className="w-6 h-6 text-yellow-500" />
-							<CardTitle>Fat</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">
-								{mealStats.gramsFat}g / {recommendedValues.fat}g
-							</div>
-							<Progress
-								value={(mealStats.gramsFat / recommendedValues.fat) * 100}
-								className={`h-2 mt-2 ${getProgressColor(
-									mealStats.gramsFat,
-									recommendedValues.fat
-								)}`}
+							<PieChart
+								series={[
+									{
+										data: [
+											{
+												label: "Carbs",
+												value: mealStats.gramsCarbs,
+												color: "#EA4228",
+											},
+											{
+												label: "Protein",
+												value: mealStats.gramsProtein,
+												color: "#A5E32B",
+											},
+											{
+												label: "Fat",
+												value: mealStats.gramsFat,
+												color: "#E6D929",
+											},
+										],
+										arcLabel: (item) => `${item.value}g`,
+										highlightScope: { fade: "global", highlight: "item" },
+										faded: {
+											innerRadius: 30,
+											additionalRadius: -30,
+											color: "gray",
+										},
+										valueFormatter: (item: { value: number }) =>
+											`${item.value}g`,
+										innerRadius: 40,
+										cornerRadius: 5,
+									},
+								]}
+								height={200}
 							/>
 						</CardContent>
 					</Card>
