@@ -30,6 +30,29 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 	if (!mealResponse) return null;
 
 	const mealStats = mealResponse.mealStats;
+	const proteinPercentage = Math.round(
+		(mealStats.gramsProtein /
+			(mealStats.gramsProtein + mealStats.gramsCarbs + mealStats.gramsFat)) *
+			100
+	);
+
+	function getProteinMessage(proteinPercentage: number): string {
+		if (proteinPercentage <= 10) {
+			return "Did you even try? This is practically a carb party.";
+		} else if (proteinPercentage <= 30) {
+			return "Are you allergic to gains, or is this just a warm-up?";
+		} else if (proteinPercentage <= 45) {
+			return "Decent, for a newb.";
+		} else if (proteinPercentage <= 55) {
+			return "Right on target!";
+		} else if (proteinPercentage <= 85) {
+			return "This meal could make a protein bar cry with envy. Solid work.";
+		} else if (proteinPercentage <= 100) {
+			return "Is this a bodybuilder's meal?";
+		} else {
+			return "ERROR";
+		}
+	}
 
 	return (
 		<Card className="w-full max-w-md mx-auto">
@@ -60,7 +83,7 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 								<Flame className="w-6 h-6 text-red-500" />
 								<CardTitle>Calories: {mealStats.calories}</CardTitle>
 							</div>
-							<CardDescription>
+							<CardDescription className="text-center">
 								Target: {recommendedValues.calories}
 							</CardDescription>
 						</CardHeader>
@@ -112,7 +135,11 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 								<Scale className="w-6 h-6 text-red-500" />
 								<CardTitle>Macros</CardTitle>
 							</div>
-							<CardDescription>Target: 50% Protein</CardDescription>
+							<CardDescription className="flex flex-col gap-0 text-center">
+								<div>Target: 50% Protein</div>
+								<div>Result: {proteinPercentage}% Protein</div>
+								<div>{getProteinMessage(proteinPercentage)}</div>
+							</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<PieChart
