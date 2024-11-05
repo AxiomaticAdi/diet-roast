@@ -52,7 +52,7 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 						<p className="text-lg italic">{mealResponse.mealRoast}</p>
 					</CardContent>
 				</Card>
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+				<div className="grid grid-cols-1 gap-4">
 					<Card>
 						<CardHeader className="flex flex-row items-center space-x-2">
 							<Flame className="w-6 h-6 text-red-500" />
@@ -105,7 +105,7 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 					<Card>
 						<CardHeader className="flex flex-row items-center space-x-2">
 							<Carrot className="w-6 h-6 text-orange-500" />
-							<CardTitle>Carbs</CardTitle>
+							<CardTitle>Carbs: {mealStats.gramsCarbs}g</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<div className="text-2xl font-bold">
@@ -114,7 +114,7 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 							<GaugeComponent
 								type="semicircle"
 								minValue={0}
-								maxValue={1000}
+								maxValue={50}
 								value={mealStats.gramsCarbs}
 								labels={{
 									valueLabel: {
