@@ -5,7 +5,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
-import { Flame, Carrot, Beef, Croissant, Utensils } from "lucide-react";
+import { Flame, Utensils, Scale } from "lucide-react";
+import { PieChart } from "@mui/x-charts/PieChart";
 import { MealResponse } from "@/types/mealTypes";
 
 import dynamic from "next/dynamic";
@@ -105,153 +106,49 @@ export default function MealReportCard({ mealResponse }: MealReportCardProps) {
 							/>
 						</CardContent>
 					</Card>
-					<Card>
-						<CardHeader className="flex flex-row items-center space-x-2">
-							<Carrot className="w-6 h-6 text-orange-500" />
-							<CardTitle>Carbs: {mealStats.gramsCarbs}g</CardTitle>
+					<Card className="flex flex-col">
+						<CardHeader className="flex flex-col items-center">
+							<div className="flex items-center space-x-2">
+								<Scale className="w-6 h-6 text-red-500" />
+								<CardTitle>Macros</CardTitle>
+							</div>
+							<CardDescription>Target: 50% Protein</CardDescription>
 						</CardHeader>
 						<CardContent>
-							<div className="text-2xl font-bold">
-								{mealStats.gramsCarbs}g / {recommendedValues.carbs}g
-							</div>
-							<GaugeComponent
-								type="semicircle"
-								minValue={0}
-								maxValue={50}
-								value={mealStats.gramsCarbs}
-								labels={{
-									valueLabel: {
-										hide: true,
-									},
-									tickLabels: {
-										hideMinMax: true,
-										type: "inner",
-										ticks: [
-											{ value: 200 },
-											{ value: 400 },
-											{ value: 600 },
-											{ value: 800 },
+							<PieChart
+								series={[
+									{
+										data: [
+											{
+												label: "Carbs",
+												value: mealStats.gramsCarbs,
+												color: "#EA4228",
+											},
+											{
+												label: "Protein",
+												value: mealStats.gramsProtein,
+												color: "#A5E32B",
+											},
+											{
+												label: "Fat",
+												value: mealStats.gramsFat,
+												color: "#E6D929",
+											},
 										],
-										defaultTickLineConfig: {
-											hide: false,
+										arcLabel: (item) => `${item.value}g`,
+										highlightScope: { fade: "global", highlight: "item" },
+										faded: {
+											innerRadius: 30,
+											additionalRadius: -30,
+											color: "gray",
 										},
-										defaultTickValueConfig: {
-											hide: true,
-										},
+										valueFormatter: (item: { value: number }) =>
+											`${item.value}g`,
+										innerRadius: 40,
+										cornerRadius: 5,
 									},
-								}}
-								arc={{
-									colorArray: ["#5BE12C", "#FFFF00", "#EA4228"],
-									subArcs: [
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-									],
-									padding: 0.02,
-									width: 0.3,
-								}}
-							/>
-						</CardContent>
-					</Card>
-					<Card>
-						<CardHeader className="flex flex-row items-center space-x-2">
-							<Beef className="w-6 h-6 text-red-700" />
-							<CardTitle>Protein</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">
-								{mealStats.gramsProtein}g / {recommendedValues.protein}g
-							</div>
-							<GaugeComponent
-								type="semicircle"
-								minValue={0}
-								maxValue={50}
-								value={mealStats.gramsProtein}
-								labels={{
-									valueLabel: {
-										hide: true,
-									},
-									tickLabels: {
-										hideMinMax: true,
-										type: "inner",
-										ticks: [
-											{ value: 10 },
-											{ value: 20 },
-											{ value: 30 },
-											{ value: 40 },
-										],
-										defaultTickLineConfig: {
-											hide: false,
-										},
-										defaultTickValueConfig: {
-											hide: true,
-										},
-									},
-								}}
-								arc={{
-									colorArray: ["#EA4228", "#FFFF00", "#5BE12C"],
-									subArcs: [
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-									],
-									padding: 0.02,
-									width: 0.3,
-								}}
-							/>
-						</CardContent>
-					</Card>
-					<Card>
-						<CardHeader className="flex flex-row items-center space-x-2">
-							<Croissant className="w-6 h-6 text-yellow-500" />
-							<CardTitle>Fat</CardTitle>
-						</CardHeader>
-						<CardContent>
-							<div className="text-2xl font-bold">
-								{mealStats.gramsFat}g / {recommendedValues.fat}g
-							</div>
-							<GaugeComponent
-								type="semicircle"
-								minValue={0}
-								maxValue={50}
-								value={mealStats.gramsFat}
-								labels={{
-									valueLabel: {
-										hide: true,
-									},
-									tickLabels: {
-										hideMinMax: true,
-										type: "inner",
-										ticks: [
-											{ value: 10 },
-											{ value: 20 },
-											{ value: 30 },
-											{ value: 40 },
-										],
-										defaultTickLineConfig: {
-											hide: false,
-										},
-										defaultTickValueConfig: {
-											hide: true,
-										},
-									},
-								}}
-								arc={{
-									colorArray: ["#5BE12C", "#FFFF00", "#EA4228"],
-									subArcs: [
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-										{ length: 0.25 },
-									],
-									padding: 0.02,
-									width: 0.3,
-								}}
+								]}
+								height={200}
 							/>
 						</CardContent>
 					</Card>
