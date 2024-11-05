@@ -15,10 +15,10 @@ const GaugeComponent = dynamic(() => import("react-gauge-component"), {
 
 // Assuming recommended values per meal for an average adult
 const recommendedValues = {
-	calories: 660,
-	carbs: 80, // grams
-	protein: 40, // grams
-	fat: 20, // grams
+	calories: 525,
+	carbs: 25, // grams
+	protein: 50, // grams
+	fat: 25, // grams
 };
 
 interface MealReportCardProps {
